@@ -26,6 +26,7 @@ let arr = format.animales
 let selectElement = nombre.target
 let value = selectElement.value
 
+// Enviando la imagen del animal al preview
     if (value == arr[0].name) {
         imagenAnimal.innerHTML = `<img src="assets/imgs/${arr[0].imagen}" alt="${arr[0].name}" class="rounded mx-auto d-block" height = "200">`
     }
@@ -47,16 +48,18 @@ let value = selectElement.value
 const agregaDatos = (e) => {
     e.preventDefault()
     
+//Datos seleccionados del formulario
     let animal = select.options[select.selectedIndex].value
     let edadA = edad.options[edad.selectedIndex].value
 
+// Validando datos del formulario
     if (animal == "Seleccione un animal" || edadA == "Seleccione un rango de años" || comentarios.value == "") {
         return alert("Ingrese todos los datos del formulario")
     }
 
     let imgForm = document.querySelector("#preview img").getAttribute("src")
     
-
+// Instanciando y agregando datos a la función que imprime la tarjeta y el Modal
     if (animal == "Leon") {
         let l1 = new Leon (animal,edadA,imgForm,comentarios.value,"Rugido.mp3")
         imprimirModal(0, edadA, comentarios.value,l1.sonido)
@@ -78,6 +81,7 @@ const agregaDatos = (e) => {
         imprimirModal(4, edadA, comentarios.value,a1.sonido)
     }
 
+// Ejecutando función que limpia los parametros del formulario
     funcionReset()
 
     
@@ -95,10 +99,12 @@ const funcionReset = () => {
 //Función que imprime en el HTML la tarjeta del animal, el modal y la reproducción del audio de dicho animal a través de un evento click
 async function imprimirModal (index, edad, comentarios, sonido) {
 
+//Tomando datos con fetch de animales.json
     let animalesJson = await fetch('/animales.json')
     let format = await animalesJson.json()
     let arr = format.animales
 
+//Formato de la tarjeta y el modal juntos para enviar al DOM
     let tarjetaAnimal = `<div class=" mt-2 mx-2 card text-light bg-secondary" style="width: 18rem;">
                             <img data-toggle="modal" data-target="#exampleModal${edad}${comentarios}${arr[index].name}" id="imagenAnimal" src="assets/imgs/${arr[index].imagen}" class="card-img-top" alt="${arr[index].name}">
                                 <div class="card-body">
@@ -120,12 +126,15 @@ async function imprimirModal (index, edad, comentarios, sonido) {
                             </div>
                             </div>`
 
+//Creando el div que dibujará la tarjeta y el modal en el DOM                            
 let divi = document.createElement("div")
 divi.innerHTML = tarjetaAnimal
 animales.appendChild(divi)
 
+//Capturando el botón de audio de los animales
 let btnAudioAnimal = document.querySelector(".audioAnimal" + arr[index].name)
 
+//Funcion que permite escuchar el sonido de los animales mediante un evento de Click
 function reproducirSonido(e) {
     e.preventDefault()
 
